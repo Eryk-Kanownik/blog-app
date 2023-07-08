@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../app/hooks";
+import { serverMessage } from "../features/message/messageSlice";
 
 const Register = () => {
+  const dispatch = useAppDispatch();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -10,12 +13,18 @@ const Register = () => {
   });
 
   const onSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(userData);
     e.preventDefault();
-    let res = await axios.post(
-      "http://localhost:5000/users/register",
-      userData
-    );
-    console.log(res.data);
+    try {
+      let res = await axios.post(
+        "http://localhost:5000/users/register",
+        userData
+      );
+      console.log(res.data);
+      dispatch(serverMessage(res.data));
+    } catch (e: any) {
+      dispatch(serverMessage(e.response.data));
+    }
   };
 
   return (
@@ -28,6 +37,7 @@ const Register = () => {
             className="input"
             id="email"
             type="email"
+            name="email"
             defaultValue={userData.email}
             onChange={(e) =>
               setUserData({ ...userData, [e.target.name]: e.target.value })
@@ -40,6 +50,7 @@ const Register = () => {
             className="input"
             id="username"
             type="text"
+            name="username"
             defaultValue={userData.username}
             onChange={(e) =>
               setUserData({ ...userData, [e.target.name]: e.target.value })
@@ -52,6 +63,7 @@ const Register = () => {
             className="input"
             id="password"
             type="password"
+            name="password"
             defaultValue={userData.password}
             onChange={(e) =>
               setUserData({ ...userData, [e.target.name]: e.target.value })

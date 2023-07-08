@@ -1,8 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../features/login/loginSlice";
+import { serverMessage } from "../features/message/messageSlice";
+import { useAppDispatch } from "../app/hooks";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -10,8 +15,16 @@ const Login = () => {
 
   const onSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let res = await axios.post("/users/login", userData);
-    console.log(res.data);
+    try {
+      let res = await axios.post("http://localhost:5000/users/login", userData);
+      dispatch(loginUser(res.data.body));
+      dispatch(serverMessage(res.data));
+      localStorage.setItem("token", res.data.body);
+      console.log(res.data);
+      navigate("/");
+    } catch (e: any) {
+      dispatch(serverMessage(e.response.data));
+    }
   };
 
   return (

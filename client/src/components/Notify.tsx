@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../app/hooks";
 
 const Notify = () => {
+  const serverMessage = useAppSelector((state) => state.message);
   const [visibility, setVisibility] = useState(false);
   useEffect(() => {
     setVisibility(true);
     setTimeout(() => setVisibility(false), 10000);
-  }, []);
+  }, [serverMessage]);
   return (
-    <div className={`notification ${visibility ? "notification-appear" : ""}`}>
+    <div
+      className={`notification ${visibility ? "notification-appear" : ""} ${
+        serverMessage.state === 1
+          ? "notification-success"
+          : "notification-failure"
+      }`}
+    >
       <div className="notification__header">
-        <h3>Success</h3>
+        <h3>{serverMessage.state === 1 ? "Success" : "Failure"}</h3>
         <div
           className="notification__header__close"
           onClick={() => setVisibility(false)}
@@ -17,12 +25,7 @@ const Notify = () => {
           &times;
         </div>
       </div>
-      <div className="notification__content">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem
-        consequuntur labore est ipsa autem facilis repudiandae explicabo
-        distinctio quibusdam eaque recusandae porro ducimus dolor eligendi,
-        harum quae quam a ipsam.
-      </div>
+      <div className="notification__content">{serverMessage.message}</div>
     </div>
   );
 };

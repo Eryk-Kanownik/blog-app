@@ -5,15 +5,35 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import User from "./views/User";
 import Notify from "./components/Notify";
+import AuthComponent from "./helpers/AuthComponent";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+    }
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Main />} path="/" />
+        <Route
+          element={
+            <AuthComponent>
+              <Main />
+            </AuthComponent>
+          }
+          path="/"
+        />
         <Route element={<Login />} path="/login" />
         <Route element={<Register />} path="/register" />
-        <Route element={<User />} path="/user/:userId" />
+        <Route
+          element={
+            <AuthComponent>
+              <User />
+            </AuthComponent>
+          }
+          path="/user/:userId"
+        />
       </Routes>
       <Notify />
     </BrowserRouter>

@@ -14,6 +14,7 @@ router.post("/register", async (req: Request, res: Response) => {
   let { username, password, email } = req.body;
   try {
     let user = await User.findOne({ email });
+    console.log(email);
     if (user !== null) {
       return res.status(200).json({
         state: ResponseType.FALIURE,
