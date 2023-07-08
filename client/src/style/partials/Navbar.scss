@@ -1,0 +1,114 @@
+.navbar {
+  padding: 1rem;
+  background: linear-gradient(
+    to bottom,
+    rgb(200, 200, 200),
+    rgba(255, 255, 255, 0.279)
+  );
+  position: sticky;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  &__list {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+    transition-duration: 0.2s;
+    &__logo {
+      display: inline-block;
+      padding: 1rem 0;
+    }
+    &__item {
+      display: inline-block;
+      padding: 1rem 0;
+      &__link {
+        color: black;
+      }
+    }
+  }
+  &__menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 1rem;
+    cursor: pointer;
+  }
+}
+
+.navbar-appear {
+  max-height: 500px !important;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    &__menu {
+      display: block;
+    }
+    &__list {
+      flex-direction: column;
+    }
+    &__options {
+      max-height: 0;
+    }
+  }
+}
+//tablets
+@media (min-width: 481px) and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    &__menu {
+      display: block;
+    }
+    &__list {
+      flex-direction: column;
+
+      gap: 0rem;
+      &__item {
+        cursor: pointer;
+        transition-duration: 0.2s;
+        padding: 1rem;
+        &:hover {
+          background-color: rgb(194, 194, 194);
+        }
+      }
+    }
+    &__options {
+      max-height: 0;
+    }
+  }
+}
+//laptops
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar {
+    &__menu {
+      display: none;
+    }
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .navbar {
+    &__menu {
+      display: none;
+    }
+  }
+}
+@media (min-width: 1201px) and (max-width: 1500px) {
+  .navbar {
+    &__menu {
+      display: none;
+    }
+  }
+}
+@media (min-width: 1501px) {
+  .navbar {
+    &__menu {
+      display: none;
+    }
+  }
+}

@@ -1,3 +1,11 @@
 .main {
-  color: red;
+  margin: 1rem 0;
+  &__header {
+    margin: 0 0 1rem;
+  }
+  &__posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

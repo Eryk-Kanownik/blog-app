@@ -19,7 +19,7 @@
     justify-content: center;
     border-radius: 5px;
     gap: 0.5rem;
-    box-shadow: 0 0 20px rgb(106, 106, 106);
+    box-shadow: $default-box-shadow;
     animation: appear 0.5s forwards;
     label {
       font-weight: 200;
@@ -29,6 +29,51 @@
     }
     &__link {
       font-size: 0.8rem;
+    }
+  }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .login {
+    &__form {
+      width: 90%;
+    }
+  }
+}
+//tablets
+@media (min-width: 481px) and (max-width: 768px) {
+  .login {
+    &__form {
+      width: 70%;
+    }
+  }
+}
+//laptops
+@media (min-width: 769px) and (max-width: 1024px) {
+  .login {
+    &__form {
+      width: 50%;
+    }
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .login {
+    &__form {
+      width: 40%;
+    }
+  }
+}
+@media (min-width: 1201px) and (max-width: 1500px) {
+  .login {
+    &__form {
+      width: 30%;
+    }
+  }
+}
+@media (min-width: 1501px) {
+  .login {
+    &__form {
+      width: 30%;
     }
   }
 }

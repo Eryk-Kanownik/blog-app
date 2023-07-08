@@ -1,6 +1,10 @@
 $ib-border-color: rgb(210, 210, 210);
 $ib-border-focus: rgb(171, 171, 171);
 $ib-border-hover: rgb(104, 104, 104);
+
+$default-border: solid 1px rgb(221, 221, 221);
+$default-box-shadow: 0 0 5px rgb(211, 211, 211);
+
 * {
   &:focus {
     outline: solid 1px rgb(183, 183, 183);
@@ -32,6 +36,7 @@ a {
   padding: 0.2rem;
   border-radius: 5px;
   transition-duration: 0.2s;
+  font-size: 1rem;
   border: solid 3px $ib-border-color;
   &:focus {
     border: solid 3px $ib-border-focus;

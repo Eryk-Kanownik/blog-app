@@ -14,14 +14,16 @@ router.post("/register", async (req: Request, res: Response) => {
   let { username, password, email } = req.body;
   try {
     let user = await User.findOne({ email });
-    if (user) {
-      //status do poprawy
+    if (user !== null) {
       return res.status(200).json({
         state: ResponseType.FALIURE,
         message: "Registration Failed. User already exist in database!",
       });
     } else {
-      password = await bcrypt.hash(password, process.env.BCRYPT_SALT!);
+      password = await bcrypt.hash(
+        password,
+        parseInt(process.env.BCRYPT_SALT!)
+      );
       user = await User.create({ username, password, email });
       return res.status(201).json({
         state: ResponseType.SUCCESS,
@@ -30,6 +32,7 @@ router.post("/register", async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       state: ResponseType.FALIURE,
       message: "Server error!",

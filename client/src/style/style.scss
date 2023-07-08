@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-@import "./partials//microelements.scss";
+@import "./partials/microelements.scss";
+@import "./partials/Postcard.scss";
+@import "./partials/Navbar.scss";
 @import "./partials/Main.scss";
 @import "./partials/Login.scss";
 @import "./partials/Register.scss";
+@import "./partials/User.scss";
 
 * {
   box-sizing: border-box;
@@ -23,4 +26,83 @@ h5,
 h6,
 p {
   margin: 0;
+}
+
+.universal-padding {
+  padding: 0 25%;
+}
+
+.notification {
+  transform: scale(0);
+  transition-duration: 0.5s;
+  z-index: 1;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.758);
+  border-radius: 5px;
+  min-width: 200px;
+  max-width: 400px;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__close {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  }
+}
+
+.notification-failure {
+  background-color: rgb(253, 137, 137);
+}
+
+.notification-success {
+  background-color: rgb(128, 232, 118);
+}
+
+.notification-appear {
+  transform: scale(1);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(197, 197, 197);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(220, 220, 220);
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .universal-padding {
+    padding: 0 1rem;
+  }
+}
+//tablets
+@media (min-width: 481px) and (max-width: 768px) {
+  .universal-padding {
+    padding: 0 1rem;
+  }
+}
+//laptops
+@media (min-width: 769px) and (max-width: 1024px) {
+  .universal-padding {
+    padding: 0 10%;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .universal-padding {
+    padding: 0 15%;
+  }
+}
+@media (min-width: 1201px) and (max-width: 1500px) {
+}
+@media (min-width: 1501px) {
 }
