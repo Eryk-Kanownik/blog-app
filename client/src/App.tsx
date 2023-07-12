@@ -7,11 +7,23 @@ import User from "./views/User";
 import Notify from "./components/Notify";
 import AuthComponent from "./helpers/AuthComponent";
 import { useEffect } from "react";
+import { useAppDispatch } from "./app/hooks";
+import axios from "axios";
+import { loadUser } from "./features/login/loginSlice";
+import CreatePost from "./views/CreatePost";
 
 function App() {
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    async function getUser() {
+      if (localStorage.getItem("token") && localStorage.getItem("userId")) {
+        let res = await axios.get(
+          `http://localhost:5000/users/${localStorage.getItem("userId")}`
+        );
+        dispatch(loadUser(res.data.body));
+      }
     }
+    getUser();
   }, []);
   return (
     <BrowserRouter>
@@ -26,6 +38,14 @@ function App() {
         />
         <Route element={<Login />} path="/login" />
         <Route element={<Register />} path="/register" />
+        <Route
+          element={
+            <AuthComponent>
+              <CreatePost />
+            </AuthComponent>
+          }
+          path="/create-post"
+        />
         <Route
           element={
             <AuthComponent>

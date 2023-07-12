@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../features/login/loginSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const user = useAppSelector((state) => state.login);
   const [visibility, setVisibility] = useState(false);
+
   return (
     <div className="navbar universal-padding">
       <ul className="navbar__list navbar__logo">
@@ -18,8 +24,14 @@ const Navbar = () => {
         }`}
       >
         <li className="navbar__list__item">
-          <Link to="/" className="navbar__list__item__link">
-            User
+          <div className="navbar__list__item__image">
+            <img src="https://picsum.photos/300/300" />
+          </div>
+          <Link
+            to={`/user/${user.userId}`}
+            className="navbar__list__item__link"
+          >
+            {user.username}
           </Link>
         </li>
         <li className="navbar__list__item">
@@ -28,7 +40,20 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="navbar__list__item">
-          <Link to="/login" className="navbar__list__item__link">
+          <Link to="/create-post" className="navbar__list__item__link">
+            Create Post
+          </Link>
+        </li>
+        <li className="navbar__list__item">
+          <Link
+            to="/login"
+            onClick={() => {
+              dispatch(logoutUser);
+              localStorage.removeItem("token");
+              localStorage.removeItem("userId");
+            }}
+            className="navbar__list__item__link"
+          >
             Logout
           </Link>
         </li>

@@ -1,5 +1,5 @@
 .login__background {
-  background: linear-gradient(to left, rgb(75, 130, 241), rgb(81, 170, 81));
+  background: rgb(83, 246, 211);
 }
 
 .login {
@@ -8,7 +8,6 @@
   display: flex;
   justify-content: center;
   align-self: center;
-
   &__form {
     padding: 2rem;
     background-color: rgb(255, 255, 255);
@@ -20,6 +19,7 @@
     border-radius: 5px;
     gap: 0.5rem;
     box-shadow: $default-box-shadow;
+    border: $default-border;
     animation: appear 0.5s forwards;
     label {
       font-weight: 200;

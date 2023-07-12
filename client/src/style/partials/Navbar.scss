@@ -1,10 +1,7 @@
 .navbar {
   padding: 1rem;
-  background: linear-gradient(
-    to bottom,
-    rgb(200, 200, 200),
-    rgba(255, 255, 255, 0.279)
-  );
+  background-color: rgb(255, 255, 255);
+  box-shadow: $default-box-shadow;
   position: sticky;
   z-index: 1;
   left: 0;
@@ -24,8 +21,21 @@
       padding: 1rem 0;
     }
     &__item {
-      display: inline-block;
+      &__image {
+        width: 25px;
+        height: 25px;
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow: $default-box-shadow;
+        border: $default-border;
+        img {
+          width: 25px;
+        }
+      }
+      display: flex;
+      gap: 0.5rem;
       padding: 1rem 0;
+      font-weight: bold;
       &__link {
         color: black;
       }
@@ -67,15 +77,10 @@
     }
     &__list {
       flex-direction: column;
-
       gap: 0rem;
       &__item {
         cursor: pointer;
         transition-duration: 0.2s;
-        padding: 1rem;
-        &:hover {
-          background-color: rgb(194, 194, 194);
-        }
       }
     }
     &__options {

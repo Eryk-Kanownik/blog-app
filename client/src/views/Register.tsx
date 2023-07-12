@@ -3,24 +3,28 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../app/hooks";
 import { serverMessage } from "../features/message/messageSlice";
+import { IUserRegisterData } from "../interfaces/types";
 
 const Register = () => {
   const dispatch = useAppDispatch();
-  const [userData, setUserData] = useState({
+
+  const [userData, setUserData] = useState<IUserRegisterData>({
     username: "",
     email: "",
     password: "",
   });
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
   const onSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(userData);
     e.preventDefault();
     try {
       let res = await axios.post(
         "http://localhost:5000/users/register",
         userData
       );
-      console.log(res.data);
       dispatch(serverMessage(res.data));
     } catch (e: any) {
       dispatch(serverMessage(e.response.data));
@@ -38,10 +42,8 @@ const Register = () => {
             id="email"
             type="email"
             name="email"
-            defaultValue={userData.email}
-            onChange={(e) =>
-              setUserData({ ...userData, [e.target.name]: e.target.value })
-            }
+            defaultValue={userData.email.toString()}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className="flex column">
@@ -51,10 +53,8 @@ const Register = () => {
             id="username"
             type="text"
             name="username"
-            defaultValue={userData.username}
-            onChange={(e) =>
-              setUserData({ ...userData, [e.target.name]: e.target.value })
-            }
+            defaultValue={userData.username.toString()}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className="flex column">
@@ -64,10 +64,8 @@ const Register = () => {
             id="password"
             type="password"
             name="password"
-            defaultValue={userData.password}
-            onChange={(e) =>
-              setUserData({ ...userData, [e.target.name]: e.target.value })
-            }
+            defaultValue={userData.password.toString()}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div>

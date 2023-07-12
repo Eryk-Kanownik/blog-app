@@ -6,7 +6,7 @@ import { ResponseType } from "../helpers/responseStatus";
 import { AuthRequest, auth } from "../helpers/auth";
 
 import jwt from "jsonwebtoken";
-import { Mongoose } from "mongoose";
+import Post from "../models/post.model";
 
 const router = Router();
 
@@ -51,7 +51,7 @@ router.post("/login", async (req: Request, res: Response) => {
       if (isEqual) {
         let token = await jwt.sign(
           {
-            userId: user.id,
+            userId: user._id,
             username: user.username,
           },
           process.env.JWT_SECRET!
@@ -59,7 +59,7 @@ router.post("/login", async (req: Request, res: Response) => {
         return res.status(200).json({
           state: ResponseType.SUCCESS,
           message: "Logged In",
-          body: token,
+          body: { token, userId: user.id, username: user.username },
         });
       } else {
         return res.status(401).json({
@@ -76,7 +76,7 @@ router.post("/login", async (req: Request, res: Response) => {
   } catch (e) {
     return res.status(500).json({
       state: ResponseType.FALIURE,
-      message: "Server Error",
+      message: "Object with wrong keys",
     });
   }
 });
@@ -92,11 +92,15 @@ router.get("/", auth, async (req: AuthRequest, res: Response) => {
 
 router.get("/:userId", async (req: Request, res: Response) => {
   let { userId } = req.params;
-  const user = await User.findById(userId);
+  const user = await User.findById({ _id: userId }).select("-password");
+  const posts = await Post.find({ userId });
   return res.json({
     state: ResponseType.SUCCESS,
     message: `User of id ${userId}`,
-    body: user,
+    body: {
+      user,
+      posts,
+    },
   });
 });
 

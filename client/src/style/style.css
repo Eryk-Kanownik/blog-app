@@ -25,32 +25,35 @@ a:hover {
 }
 
 .input {
-  padding: 0.2rem;
+  padding: 0.5rem;
   border-radius: 5px;
   transition-duration: 0.2s;
   font-size: 1rem;
-  border: solid 3px rgb(210, 210, 210);
+  box-shadow: 0 0 5px rgb(211, 211, 211);
+  border: solid 1px rgb(210, 210, 210);
 }
 .input:focus {
-  border: solid 3px rgb(171, 171, 171);
+  border: solid 1px rgb(171, 171, 171);
 }
 .input:hover {
-  border: solid 3px rgb(171, 171, 171);
+  border: solid 1px rgb(171, 171, 171);
 }
 
 .btn {
   cursor: pointer;
-  padding: 0.2rem;
+  padding: 0.5rem;
+  font-weight: bold;
   font-size: 1rem;
   border-radius: 5px;
   transition-duration: 0.2s;
-  border: solid 3px rgb(210, 210, 210);
+  border: solid 1px rgb(210, 210, 210);
+  box-shadow: 0 0 5px rgb(211, 211, 211);
 }
 .btn:focus {
-  border: solid 3px rgb(171, 171, 171);
+  border: solid 1px rgb(171, 171, 171);
 }
 .btn:hover {
-  border: solid 3px rgb(171, 171, 171);
+  border: solid 1px rgb(171, 171, 171);
 }
 
 .postcard {
@@ -249,7 +252,8 @@ a:hover {
 
 .navbar {
   padding: 1rem;
-  background: linear-gradient(to bottom, rgb(200, 200, 200), rgba(255, 255, 255, 0.279));
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 5px rgb(211, 211, 211);
   position: sticky;
   z-index: 1;
   left: 0;
@@ -271,8 +275,21 @@ a:hover {
   padding: 1rem 0;
 }
 .navbar__list__item {
-  display: inline-block;
+  display: flex;
+  gap: 0.5rem;
   padding: 1rem 0;
+  font-weight: bold;
+}
+.navbar__list__item__image {
+  width: 25px;
+  height: 25px;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgb(211, 211, 211);
+  border: solid 1px rgb(221, 221, 221);
+}
+.navbar__list__item__image img {
+  width: 25px;
 }
 .navbar__list__item__link {
   color: black;
@@ -317,10 +334,6 @@ a:hover {
   .navbar__list__item {
     cursor: pointer;
     transition-duration: 0.2s;
-    padding: 1rem;
-  }
-  .navbar__list__item:hover {
-    background-color: rgb(194, 194, 194);
   }
   .navbar__options {
     max-height: 0;
@@ -359,7 +372,7 @@ a:hover {
 }
 
 .login__background {
-  background: linear-gradient(to left, rgb(75, 130, 241), rgb(81, 170, 81));
+  background: rgb(83, 246, 211);
 }
 
 .login {
@@ -380,6 +393,7 @@ a:hover {
   border-radius: 5px;
   gap: 0.5rem;
   box-shadow: 0 0 5px rgb(211, 211, 211);
+  border: solid 1px rgb(221, 221, 221);
   animation: appear 0.5s forwards;
 }
 .login__form label {
@@ -433,7 +447,7 @@ a:hover {
   }
 }
 .register__background {
-  background: linear-gradient(to left, rgb(81, 170, 81), rgb(75, 130, 241));
+  background: rgb(158, 249, 158);
 }
 
 .user {
@@ -461,6 +475,7 @@ a:hover {
   display: flex;
   align-items: center;
   box-shadow: 0 0 5px black;
+  cursor: pointer;
 }
 .user__header__image img {
   width: 100%;
@@ -472,6 +487,7 @@ a:hover {
   gap: 1rem;
   position: sticky;
   top: calc(57px + 1rem);
+  z-index: 1;
 }
 .user__sections div {
   padding: 1rem;
@@ -492,7 +508,34 @@ a:hover {
 }
 
 .active {
-  background-color: rgb(195, 195, 195) !important;
+  background-color: rgb(231, 231, 231) !important;
+}
+
+.create-post__header {
+  margin-bottom: 1rem;
+}
+.create-post__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.create-post__form__textarea {
+  resize: none;
+}
+.create-post__form__file {
+  width: 100%;
+  text-align: center;
+  border: solid 1px rgb(221, 221, 221);
+  border-radius: solid 1px rgb(221, 221, 221);
+  padding: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.create-post__form__file:hover {
+  background-color: rgb(225, 225, 225);
+}
+.create-post__form #file {
+  display: none;
 }
 
 * {
@@ -523,7 +566,7 @@ p {
   transform: scale(0);
   transition-duration: 0.5s;
   z-index: 1;
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
   right: 1rem;
   padding: 1rem;
@@ -554,6 +597,37 @@ p {
   transform: scale(1);
 }
 
+.loading-page {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  font-size: 50px;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-page__title::after {
+  content: "Hello";
+  animation: loading-animation infinite 2s;
+}
+
+@keyframes loading-animation {
+  0% {
+    content: "";
+  }
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
+}
 ::-webkit-scrollbar {
   width: 10px;
 }

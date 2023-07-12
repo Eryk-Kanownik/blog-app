@@ -1,11 +1,30 @@
-import React, { useRef, useState } from "react";
+import React, { createRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AddComment from "./AddComment";
 import CommentCard from "./CommentCard";
+import { IPost } from "../interfaces/types";
+import NoCommentCard from "./NoCommentCard";
 
-const PostCard = () => {
-  const [unfoldComments, setUnfoldComments] = useState(false);
-  const [unfoldOptions, setUnfoldOptions] = useState(false);
+const PostCard: React.FC<IPost> = ({
+  username,
+  userId,
+  content,
+  createdAt,
+  comments,
+}) => {
+  const [unfoldComments, setUnfoldComments] = useState<boolean>(false);
+  const [unfoldOptions, setUnfoldOptions] = useState<boolean>(false);
+
+  const commentsUnfold = () => {
+    setUnfoldComments(true);
+  };
+
+  const mappedComments =
+    comments.length > 0 ? (
+      comments.map((comment) => <CommentCard />)
+    ) : (
+      <NoCommentCard />
+    );
 
   return (
     <div className="postcard">
@@ -15,7 +34,7 @@ const PostCard = () => {
             <img src="https://picsum.photos/200/200" />
           </div>
           <div className="postcard__header__user__username">
-            <Link to="/user/1">Username</Link>
+            <Link to={`/user/${userId}`}>{username}</Link>
           </div>
         </div>
         <div
@@ -36,13 +55,8 @@ const PostCard = () => {
           </div>
         </div>
       </div>
-      <div className="postcard__date">{new Date().toLocaleString()}</div>
-      <div className="postcard__content">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde ipsa
-        voluptate, architecto sed itaque porro expedita voluptatem commodi
-        nesciunt pariatur accusantium assumenda a labore maxime qui similique
-        possimus id magnam.
-      </div>
+      <div className="postcard__date">{createdAt}</div>
+      <div className="postcard__content">{content}</div>
       <div className="postcard__media">
         <img src="https://picsum.photos/500/300" />
       </div>
@@ -50,9 +64,9 @@ const PostCard = () => {
         <div className="postcard__optionbar__like">72 Like</div>
         <div
           className="postcard__optionbar__comment"
-          onClick={() => setUnfoldComments(true)}
+          onClick={() => commentsUnfold()}
         >
-          63 Comment
+          {comments.length} Comment
         </div>
         <div className="postcard__optionbar__share">Share</div>
       </div>
@@ -65,11 +79,7 @@ const PostCard = () => {
             unfoldComments ? "set__visible" : ""
           }`}
         >
-          <CommentCard />
-          <CommentCard />
-          <CommentCard />
-          <CommentCard />
-          <CommentCard />
+          {mappedComments}
         </div>
       </div>
     </div>
