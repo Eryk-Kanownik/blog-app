@@ -49,17 +49,21 @@ router.post("/login", async (req: Request, res: Response) => {
     if (user) {
       let isEqual = await bcrypt.compare(password, user.password);
       if (isEqual) {
-        let token = await jwt.sign(
-          {
-            userId: user._id,
-            username: user.username,
-          },
-          process.env.JWT_SECRET!
-        );
+        let data = {
+          userId: user._id,
+          username: user.username,
+          userProfileImage: user.userProfileImage,
+        };
+        let token = await jwt.sign(data, process.env.JWT_SECRET!);
         return res.status(200).json({
           state: ResponseType.SUCCESS,
           message: "Logged In",
-          body: { token, userId: user.id, username: user.username },
+          body: {
+            token,
+            userId: user.id,
+            username: user.username,
+            userProfileImage: user.userProfileImage,
+          },
         });
       } else {
         return res.status(401).json({

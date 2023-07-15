@@ -25,7 +25,7 @@ const Navbar = () => {
       >
         <li className="navbar__list__item">
           <div className="navbar__list__item__image">
-            <img src="https://picsum.photos/300/300" />
+            <img src={user.userProfileImage} />
           </div>
           <Link
             to={`/user/${user.userId}`}

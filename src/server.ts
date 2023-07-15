@@ -5,7 +5,6 @@ import userRoutes from "./controllers/user.controller";
 
 import { database } from "./database";
 import postRoutes from "./controllers/post.controller";
-import { upload } from "./helpers/fileUpload";
 
 dotenv.config();
 database();
@@ -16,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/public", express.static(__dirname.replace("src", "public")));
+
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 

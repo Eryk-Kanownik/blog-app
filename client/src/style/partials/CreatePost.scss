@@ -1,6 +1,6 @@
 .create-post {
   &__header {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
   }
   &__form {
     display: flex;
@@ -9,17 +9,26 @@
     &__textarea {
       resize: none;
     }
-    &__file {
-      width: 100%;
+    &__images {
       text-align: center;
-      border: $default-border;
-      border-radius: $default-border;
-      padding: 1rem;
+    }
+    &__file {
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition-duration: 0.2s;
+      font-size: 1rem;
+      box-shadow: $default-box-shadow;
+      border: solid 1px $ib-border-color;
+      text-align: center;
       font-weight: bold;
-      cursor: pointer;
-      &:hover {
-        background-color: rgb(225, 225, 225);
+      background-color: rgb(230, 230, 230);
+      &:focus {
+        border: solid 1px $ib-border-focus;
       }
+      &:hover {
+        border: solid 1px $ib-border-focus;
+      }
+      cursor: pointer;
     }
     #file {
       display: none;

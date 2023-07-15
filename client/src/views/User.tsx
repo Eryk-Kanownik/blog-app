@@ -23,28 +23,28 @@ const User = () => {
     getUserWithData();
   }, []);
 
-  let data = postsActive ? (
-    user.userPosts.map((post: IPost, index: React.Key) => (
-      <PostCard
-        key={index}
-        _id={post._id}
-        username={post.username}
-        userId={post.userId}
-        content={post.content}
-        createdAt={post.createdAt}
-        comments={post.comments}
-      />
-    ))
-  ) : (
-    <CommentCard />
-  );
+  let data = postsActive
+    ? user.userPosts.map((post: IPost, index: React.Key) => (
+        <PostCard
+          likes={post.likes}
+          key={index}
+          _id={post._id}
+          username={post.username}
+          userId={post.userId}
+          content={post.content}
+          createdAt={post.createdAt}
+          comments={post.comments}
+          userProfileImage={post.userProfileImage}
+        />
+      ))
+    : "Hello";
   return (
     <>
       <Navbar />
       <div className="universal-padding user">
         <div className="user__header">
           <div className="user__header__image">
-            <img src="https://picsum.photos/300/300" />
+            <img src={user.userProfileImage} />
           </div>
           <div className="user__header__username">
             <h1>{user.username}</h1>

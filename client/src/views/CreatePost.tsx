@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { ICreatePost } from "../interfaces/types";
-import { forEachChild } from "typescript";
 import axios from "axios";
-import { fileUploadConfig } from "../helpers/AxiosConfigs";
+import { authConfig, fileUploadConfig } from "../helpers/AxiosConfigs";
 
 const CreatePost = () => {
   const [post, setPost] = useState<ICreatePost>({
@@ -11,8 +10,9 @@ const CreatePost = () => {
     files: [],
   });
 
-  const chooseFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPost({ ...post, files: e.target.files });
+  const chooseFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let files = e.target.files![0];
+    setPost({ ...post, files });
   };
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,12 +22,10 @@ const CreatePost = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let fd = new FormData();
-    fd.append("content", post.content.toString());
-    fd.append("files", post.files);
     let res = await axios.post(
       "http://localhost:5000/posts",
-      fd,
-      fileUploadConfig
+      { content: post.content },
+      authConfig
     );
   };
 
@@ -45,17 +43,19 @@ const CreatePost = () => {
             className="create-post__form__textarea input"
             rows={5}
             onChange={(e) => changeContent(e)}
+            placeholder="Your content goes here..."
           ></textarea>
-          <div className="create-post__form__images">No images</div>
+          <div className="create-post__form__images">
+            No images uploaded yet...
+          </div>
           <label className="create-post__form__file" htmlFor="file">
             Upload File
           </label>
           <input
             id="file"
             type="file"
-            onChange={(e) => chooseFile(e)}
+            onChange={(e) => chooseFiles(e)}
             className="create-post__file"
-            multiple
           />
           <button type="submit" className="btn">
             Create post

@@ -77,6 +77,7 @@ a:hover {
   border-radius: 50px;
   overflow: hidden;
   background-color: rgb(200, 200, 200);
+  background-color: white;
   width: 50px;
   height: 50px;
   box-shadow: 0 0 5px gray;
@@ -183,22 +184,24 @@ a:hover {
 
 .add__comment {
   position: sticky;
+  z-index: 1;
   top: 0;
   left: 0;
   right: 0;
   padding: 1rem 1rem 0rem 1rem;
   width: 100%;
   display: grid;
-  background: linear-gradient(to bottom, rgb(209, 209, 209), rgba(255, 255, 255, 0.404));
-  grid-template-columns: 35px 1fr auto;
+  background: linear-gradient(to bottom, rgb(197, 197, 197), rgba(255, 255, 255, 0.814));
+  grid-template-columns: 43px 1fr auto;
   gap: 0.5rem;
 }
 .add__comment__image {
-  height: 35px;
-  width: 100%;
+  height: 43px;
+  width: 43px;
   border-radius: 50px;
   overflow: hidden;
   box-shadow: 0 0 5px gray;
+  background-color: white;
 }
 .add__comment__image img {
   width: 100%;
@@ -228,6 +231,7 @@ a:hover {
   border-radius: 5px;
   box-shadow: 0 0 5px rgb(211, 211, 211);
   border: solid 1px rgb(221, 221, 221);
+  animation: post-appear 0.5s forwards;
 }
 .commentcard__header {
   display: flex;
@@ -248,6 +252,13 @@ a:hover {
 .commentcard__content {
   padding: 0.25rem 1rem 1rem 1rem;
   font-size: 0.9rem;
+}
+
+.liked {
+  background-color: rgb(109, 208, 238);
+}
+.liked:hover {
+  background-color: rgb(89, 182, 211);
 }
 
 .navbar {
@@ -289,7 +300,7 @@ a:hover {
   border: solid 1px rgb(221, 221, 221);
 }
 .navbar__list__item__image img {
-  width: 25px;
+  width: 100%;
 }
 .navbar__list__item__link {
   color: black;
@@ -512,7 +523,7 @@ a:hover {
 }
 
 .create-post__header {
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 .create-post__form {
   display: flex;
@@ -522,17 +533,26 @@ a:hover {
 .create-post__form__textarea {
   resize: none;
 }
-.create-post__form__file {
-  width: 100%;
+.create-post__form__images {
   text-align: center;
-  border: solid 1px rgb(221, 221, 221);
-  border-radius: solid 1px rgb(221, 221, 221);
-  padding: 1rem;
+}
+.create-post__form__file {
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition-duration: 0.2s;
+  font-size: 1rem;
+  box-shadow: 0 0 5px rgb(211, 211, 211);
+  border: solid 1px rgb(210, 210, 210);
+  text-align: center;
   font-weight: bold;
+  background-color: rgb(230, 230, 230);
   cursor: pointer;
 }
+.create-post__form__file:focus {
+  border: solid 1px rgb(171, 171, 171);
+}
 .create-post__form__file:hover {
-  background-color: rgb(225, 225, 225);
+  border: solid 1px rgb(171, 171, 171);
 }
 .create-post__form #file {
   display: none;
@@ -618,14 +638,17 @@ p {
   0% {
     content: "";
   }
-  33% {
+  25% {
     content: ".";
   }
-  66% {
+  50% {
     content: "..";
   }
-  100% {
+  75% {
     content: "...";
+  }
+  100% {
+    content: "";
   }
 }
 ::-webkit-scrollbar {
@@ -634,11 +657,11 @@ p {
 
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px rgb(197, 197, 197);
-  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgb(220, 220, 220);
+  border-radius: 10px;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {

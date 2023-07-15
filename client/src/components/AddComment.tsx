@@ -1,13 +1,56 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import axios from "axios";
+import { authConfig } from "../helpers/AxiosConfigs";
+import { addComment } from "../features/posts/postsSlice";
+import { serverMessage } from "../features/message/messageSlice";
 
-const AddComment = () => {
+const AddComment: React.FC<{ postId: string }> = ({ postId }) => {
+  const dispatch = useAppDispatch();
+  const [comment, setComment] = useState<String>("");
+  const loggedUser = useAppSelector((state) => state.login);
+  const btnRef = useRef<any>();
+  const inputRef = useRef<any>();
+
+  useEffect(() => {
+    if (comment.length === 0) {
+      btnRef.current!.disabled = true;
+    } else {
+      btnRef.current!.disabled = false;
+    }
+  }, [comment.length]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value);
+  };
+
+  const submitComment = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    let res = await axios.post(
+      `http://localhost:5000/posts/${postId}/comment`,
+      { content: comment },
+      authConfig
+    );
+    dispatch(addComment(res.data.body));
+    dispatch(serverMessage(res.data));
+    setComment("");
+    inputRef.current.value = "";
+  };
+
   return (
     <div className="add__comment">
       <div className="add__comment__image">
-        <img src="https://picsum.photos/200/200" />
+        <img src={loggedUser.userProfileImage} />
       </div>
-      <input type="text" className="input" />
-      <button className="btn">Add comment</button>
+      <input
+        type="text"
+        className="input"
+        defaultValue={comment.toString()}
+        onChange={(e) => onChange(e)}
+        ref={inputRef}
+      />
+      <button className="btn" onClick={(e) => submitComment(e)} ref={btnRef}>
+        Add comment
+      </button>
     </div>
   );
 };
