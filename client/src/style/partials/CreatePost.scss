@@ -1,4 +1,5 @@
 .create-post {
+  animation: appear 0.5s;
   &__header {
     margin: 1rem 0;
   }
@@ -33,5 +34,14 @@
     #file {
       display: none;
     }
+  }
+}
+
+@keyframes appear {
+  from {
+    transform: scale(0, 0);
+  }
+  to {
+    transform: scale(1, 1);
   }
 }

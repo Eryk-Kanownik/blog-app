@@ -3,8 +3,10 @@ import Navbar from "../components/Navbar";
 import { ICreatePost } from "../interfaces/types";
 import axios from "axios";
 import { authConfig, fileUploadConfig } from "../helpers/AxiosConfigs";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const [post, setPost] = useState<ICreatePost>({
     content: "bvbcv",
     files: [],
@@ -27,6 +29,7 @@ const CreatePost = () => {
       { content: post.content },
       authConfig
     );
+    navigate("/");
   };
 
   return (

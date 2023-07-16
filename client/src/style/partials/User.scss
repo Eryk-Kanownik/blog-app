@@ -14,6 +14,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    animation: appear 0.5s;
     &__image {
       width: 100px;
       height: 100px;
@@ -36,6 +37,7 @@
     position: sticky;
     top: calc(57px + 1rem);
     z-index: 1;
+    animation: appear 0.5s;
     div {
       padding: 1rem;
       border: $default-border;

@@ -477,6 +477,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 1rem;
+  animation: appear 0.5s;
 }
 .user__header__image {
   width: 100px;
@@ -499,6 +500,7 @@ a:hover {
   position: sticky;
   top: calc(57px + 1rem);
   z-index: 1;
+  animation: appear 0.5s;
 }
 .user__sections div {
   padding: 1rem;
@@ -522,6 +524,9 @@ a:hover {
   background-color: rgb(231, 231, 231) !important;
 }
 
+.create-post {
+  animation: appear 0.5s;
+}
 .create-post__header {
   margin: 1rem 0;
 }
@@ -558,6 +563,14 @@ a:hover {
   display: none;
 }
 
+@keyframes appear {
+  from {
+    transform: scale(0, 0);
+  }
+  to {
+    transform: scale(1, 1);
+  }
+}
 * {
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
