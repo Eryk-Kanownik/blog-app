@@ -75,7 +75,7 @@
     border-bottom: solid 1px rgb(213, 213, 213);
     border-top: solid 1px rgb(213, 213, 213);
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     text-align: center;
     div {
       cursor: pointer;
@@ -200,6 +200,11 @@
       }
     }
   }
+  &__date {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: rgb(151, 151, 151);
+  }
   &__content {
     padding: 0.25rem 1rem 1rem 1rem;
     font-size: 0.9rem;
@@ -211,4 +216,20 @@
   &:hover {
     background-color: rgb(89, 182, 211);
   }
+}
+
+.prev {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translate(0, -50%);
+  cursor: pointer;
+}
+
+.next {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translate(0, -50%);
+  cursor: pointer;
 }

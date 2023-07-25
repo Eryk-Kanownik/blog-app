@@ -1,34 +1,44 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import { ICreatePost } from "../interfaces/types";
 import axios from "axios";
-import { authConfig, fileUploadConfig } from "../helpers/AxiosConfigs";
+import { fileUploadConfig } from "../helpers/AxiosConfigs";
 import { useNavigate } from "react-router-dom";
+import LittleImage from "./LittleImage";
+import { useAppDispatch } from "../app/hooks";
+import { serverMessage } from "../features/message/messageSlice";
 
 const CreatePost = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [post, setPost] = useState<ICreatePost>({
-    content: "bvbcv",
-    files: [],
-  });
+  const [content, setContent] = useState("");
+  const [files, setFiles] = useState<FileList>();
+  const [preview, setPreview] = useState<any>([]);
 
   const chooseFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let files = e.target.files![0];
-    setPost({ ...post, files });
+    let files = e.target.files!;
+    for (var i = 0; i < files?.length!; i++) {
+      preview.push(URL.createObjectURL(files.item(i)!));
+    }
+    setFiles(files);
   };
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPost({ ...post, content: e.target.value });
+    setContent(e.target.value);
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let fd = new FormData();
+    let formData = new FormData();
+    formData.append("content", content.toString());
+    for (var i = 0; i < files?.length!; i++) {
+      formData.append("files", files?.item(i)!);
+    }
     let res = await axios.post(
       "http://localhost:5000/posts",
-      { content: post.content },
-      authConfig
+      formData,
+      fileUploadConfig
     );
+    dispatch(serverMessage(res.data));
     navigate("/");
   };
 
@@ -49,7 +59,11 @@ const CreatePost = () => {
             placeholder="Your content goes here..."
           ></textarea>
           <div className="create-post__form__images">
-            No images uploaded yet...
+            {preview.length > 0
+              ? preview.map((imgSrc: any, index: React.Key) => (
+                  <LittleImage key={index} imagePath={imgSrc} />
+                ))
+              : "No images uploaded..."}
           </div>
           <label className="create-post__form__file" htmlFor="file">
             Upload File
@@ -57,8 +71,10 @@ const CreatePost = () => {
           <input
             id="file"
             type="file"
+            name="files"
             onChange={(e) => chooseFiles(e)}
             className="create-post__file"
+            multiple
           />
           <button type="submit" className="btn">
             Create post

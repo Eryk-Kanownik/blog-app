@@ -29,6 +29,7 @@ export const userSlice = createSlice({
       state.username = action.payload.user.username;
       state.userProfileImage = action.payload.user.userProfileImage;
       state.userPosts = action.payload.posts;
+      state.userComments = action.payload.comments;
     },
   },
 });

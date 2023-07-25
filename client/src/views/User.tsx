@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import PostCard from "../components/PostCard";
 import CommentCard from "../components/CommentCard";
@@ -7,12 +7,20 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loadUserData } from "../features/user/userSlice";
 import { useAppSelector } from "../app/hooks";
-import { IPost } from "../interfaces/types";
+import { IComment, IPost } from "../interfaces/types";
+import ChangeProfilePicture from "../components/ChangeProfilePicture";
 
 const User = () => {
   const user = useAppSelector((state) => state.user);
-  const { userId } = useParams();
+  const [selectedOption, setSelectedState] = useState<"change-profile-picture">(
+    "change-profile-picture"
+  );
+  const [options, setOptions] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
   const dispatch = useDispatch();
+
+  const { userId } = useParams();
+
   const [postsActive, setPostsActive] = useState<boolean>(true);
 
   useEffect(() => {
@@ -23,21 +31,47 @@ const User = () => {
     getUserWithData();
   }, []);
 
-  let data = postsActive
-    ? user.userPosts.map((post: IPost, index: React.Key) => (
-        <PostCard
-          likes={post.likes}
-          key={index}
-          _id={post._id}
-          username={post.username}
-          userId={post.userId}
-          content={post.content}
-          createdAt={post.createdAt}
-          comments={post.comments}
-          userProfileImage={post.userProfileImage}
-        />
-      ))
-    : "Hello";
+  let posts = user.userPosts.map((post: IPost, index: React.Key) => (
+    <PostCard
+      key={index}
+      likes={post.likes}
+      _id={post._id}
+      username={post.username}
+      userId={post.userId}
+      content={post.content}
+      createdAt={post.createdAt}
+      comments={post.comments}
+      userProfileImage={post.userProfileImage}
+      images={post.images}
+      isPostLiked={
+        post.likes
+          .map((like: any) => like.userLikedId.toString())
+          .indexOf(user.userId?.toString()) >= 0
+      }
+    />
+  ));
+
+  let comments = user.userComments.map(
+    (comment: IComment, index: React.Key) => (
+      <CommentCard
+        key={index}
+        userCommentedId={comment.userCommentedId}
+        userCommentedName={comment.userCommentedName}
+        userCommentedProfileImage={comment.userCommentedProfileImage}
+        commentContent={comment.commentContent}
+        commentCreatedAt={comment.commentCreatedAt}
+      />
+    )
+  );
+
+  let data = postsActive ? posts : comments;
+
+  function renderComponentInDialogBox() {
+    if (selectedOption === "change-profile-picture") {
+      return <ChangeProfilePicture />;
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -67,6 +101,42 @@ const User = () => {
           </div>
         </div>
         <div className="user__data">{data}</div>
+        <div className="user__rightmenu">
+          <div
+            className={`user__rightmenu__options ${
+              options ? "show-options" : ""
+            } `}
+          >
+            <button
+              className="btn"
+              onClick={() => {
+                dialogRef.current?.showModal();
+              }}
+            >
+              Change profile picture
+            </button>
+            <button className="btn">Hi</button>
+            <button className="btn">Bye</button>
+          </div>
+          <button
+            className="btn user__rightmenu__main"
+            onClick={() => setOptions(!options)}
+          >
+            Options
+          </button>
+        </div>
+        <dialog ref={dialogRef} className="dialog">
+          <div className="dialog__header">
+            <h1>Account Setting</h1>
+            <h1
+              className="dialog__header__close"
+              onClick={() => dialogRef.current!.close()}
+            >
+              &times;
+            </h1>
+          </div>
+          {renderComponentInDialogBox()}
+        </dialog>
       </div>
     </>
   );

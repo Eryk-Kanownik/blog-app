@@ -12,6 +12,10 @@
     }
     &__images {
       text-align: center;
+      display: flex;
+      gap: 1rem;
+      div {
+      }
     }
     &__file {
       padding: 0.5rem;
@@ -43,5 +47,29 @@
   }
   to {
     transform: scale(1, 1);
+  }
+}
+
+.little-image {
+  height: 50px;
+  animation: appear 0.5s;
+  background-color: rgb(220, 220, 220);
+  position: relative;
+  box-shadow: 0 0 2px;
+  cursor: pointer;
+  &__delete {
+    box-shadow: 0 0 2px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 50px;
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    color: white;
+    transform: translate(50%, -50%);
+  }
+  img {
+    width: 50px;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import { useDispatch } from "react-redux";
@@ -34,11 +34,7 @@ const Navbar = () => {
             {user.username}
           </Link>
         </li>
-        <li className="navbar__list__item">
-          <Link to="/" className="navbar__list__item__link">
-            Chat
-          </Link>
-        </li>
+
         <li className="navbar__list__item">
           <Link to="/create-post" className="navbar__list__item__link">
             Create Post

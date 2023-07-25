@@ -2,6 +2,9 @@ import Router, { Request, Response } from "express";
 import Post from "../models/post.model";
 import { ResponseType } from "../helpers/responseStatus";
 import { AuthRequest, auth } from "../helpers/auth";
+import { upload } from "../helpers/fileUpload";
+import fs from "fs";
+import { serverMessage } from "../../client/src/features/message/messageSlice";
 
 const router = Router();
 
@@ -23,29 +26,50 @@ router.get("/:postId", async (req: Request, res: Response) => {
   });
 });
 
-router.post("/", auth, async (req: AuthRequest, res: Response) => {
-  try {
-    let { username, userId, userProfileImage }: any = req.user;
-    let { content } = req.body;
-    let post = {
-      content,
-      username,
-      userId,
-      userProfileImage,
-    };
-    await Post.create(post);
-    return res.status(200).json({
-      state: ResponseType.SUCCESS,
-      message: `Post created!`,
-      body: post,
-    });
-  } catch (e) {
-    return res.status(400).json({
-      state: ResponseType.SUCCESS,
-      message: `Something went wrong.Post not created.`,
-    });
+router.post(
+  "/",
+  auth,
+  upload.array("files"),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      let { files }: any = req;
+      let paths = files?.map(
+        (file: any) => "http://localhost:5000/" + file.path
+      )!;
+      let { username, userId, userProfileImage }: any = req.user;
+      let { content } = req.body;
+      let post = {
+        content,
+        username,
+        userId,
+        userProfileImage,
+        images: paths,
+      };
+      await Post.create(post);
+
+      return res.status(200).json({
+        state: ResponseType.SUCCESS,
+        message: `Post created!`,
+        body: post,
+      });
+    } catch (e) {
+      return res.status(400).json({
+        state: ResponseType.SUCCESS,
+        message: `Something went wrong. Post not created.`,
+      });
+    }
   }
-});
+);
+
+//upload file
+router.post(
+  "/files",
+  upload.array("files"),
+  async (req: AuthRequest, res: Response) => {
+    let { files }: any = req;
+    let paths = files?.map((file: any) => file.path)!;
+  }
+);
 
 //add like
 router.put("/:postId/like", auth, async (req: AuthRequest, res: Response) => {
@@ -78,7 +102,6 @@ router.post(
   auth,
   async (req: AuthRequest, res: Response) => {
     let { content } = req.body;
-    console.log(content);
     let { userId, userProfileImage, username }: any = req.user;
     let { postId } = req.params;
     let comment = {

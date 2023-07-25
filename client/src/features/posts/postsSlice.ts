@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPost } from "../../interfaces/types";
 import { stat } from "fs";
+import axios from "axios";
 
 export interface PostsState {
   posts: IPost[];
@@ -9,16 +10,18 @@ export interface PostsState {
 
 const initialState: PostsState = {
   posts: [],
-  status: "idle",
+  status: "loading",
 };
+
+export const loadPosts = createAsyncThunk("posts/loadPosts", async (posts) => {
+  let res = await axios.get("http://localhost:5000/posts");
+  return res.data.body;
+});
 
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    loadPosts: (state, action) => {
-      state.posts = action.payload;
-    },
     likePost: (state, action) => {
       state.posts[
         state.posts.map((post) => post._id).indexOf(action.payload._id)
@@ -30,8 +33,21 @@ export const postsSlice = createSlice({
       ] = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loadPosts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(loadPosts.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.posts = action.payload;
+      })
+      .addCase(loadPosts.rejected, (state) => {
+        state.status = "failed";
+      });
+  },
 });
 
-export const { loadPosts, likePost, addComment } = postsSlice.actions;
+export const { likePost, addComment } = postsSlice.actions;
 
 export default postsSlice.reducer;

@@ -21,6 +21,8 @@ export interface IPost {
   createdAt: String;
   comments: String[];
   likes: String[];
+  images: String[];
+  isPostLiked: boolean;
 }
 
 //Comment
@@ -30,6 +32,7 @@ export interface IComment {
   userCommentedId: string;
   userCommentedProfileImage: string;
   commentContent: String;
+  commentCreatedAt: String;
 }
 
 //Like

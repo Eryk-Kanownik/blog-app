@@ -6,6 +6,7 @@ let PostScheme: mongoose.Schema = new mongoose.Schema({
   userProfileImage: { type: String },
   content: { type: String },
   createdAt: { type: Date, default: Date.now() },
+  images: [{ type: String }],
   comments: [
     {
       userCommentedId: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
@@ -14,9 +15,7 @@ let PostScheme: mongoose.Schema = new mongoose.Schema({
       commentContent: {
         type: String,
       },
-      commentCreatedAt: {
-        createdAt: { type: Date, default: Date.now() },
-      },
+      commentCreatedAt: { type: Date, default: Date.now() },
     },
   ],
   likes: [

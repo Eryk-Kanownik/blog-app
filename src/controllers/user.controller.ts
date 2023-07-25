@@ -96,14 +96,28 @@ router.get("/", auth, async (req: AuthRequest, res: Response) => {
 
 router.get("/:userId", async (req: Request, res: Response) => {
   let { userId } = req.params;
+
   const user = await User.findById({ _id: userId }).select("-password");
-  const posts = await Post.find({ userId });
+  const posts = await Post.find({ userId }).sort({ createdAt: -1 });
+  const allComments = await Post.find();
+
+  let userComments: any[] = [];
+
+  allComments.map((post) =>
+    post.comments.map((comment: any) => {
+      if (comment.userCommentedId.toString() === userId) {
+        return userComments.push(comment);
+      }
+    })
+  );
+
   return res.json({
     state: ResponseType.SUCCESS,
     message: `User of id ${userId}`,
     body: {
       user,
       posts,
+      comments: userComments,
     },
   });
 });

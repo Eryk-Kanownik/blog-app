@@ -1,8 +1,8 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AddComment from "./AddComment";
 import CommentCard from "./CommentCard";
-import { IComment, ILike, IPost } from "../interfaces/types";
+import { IPost } from "../interfaces/types";
 import NoCommentCard from "./NoCommentCard";
 import axios from "axios";
 import { authConfig } from "../helpers/AxiosConfigs";
@@ -20,22 +20,16 @@ const PostCard: React.FC<IPost> = ({
   comments,
   userProfileImage,
   likes,
+  images,
+  isPostLiked,
 }) => {
+  const posts = useAppSelector((state) => state.posts.posts);
+
   const dispatch = useAppDispatch();
   const loggedUser = useAppSelector((state) => state.login);
   const [unfoldComments, setUnfoldComments] = useState<boolean>(false);
   const [unfoldOptions, setUnfoldOptions] = useState<boolean>(false);
-  const [isPostLikedByLoggedUser, setIsPostLikedByLoggedUser] =
-    useState<boolean>(false);
-  useEffect(() => {
-    if (
-      likes.map((like: any) => like.userLikedId).indexOf(loggedUser.userId) >= 0
-    ) {
-      setIsPostLikedByLoggedUser(true);
-    } else {
-      setIsPostLikedByLoggedUser(false);
-    }
-  }, [likes]);
+  const [currentImage, setCurrentImage] = useState(0);
 
   const like = async () => {
     let res = await axios.put(
@@ -48,17 +42,35 @@ const PostCard: React.FC<IPost> = ({
   };
 
   const commentsUnfold = () => {
-    setUnfoldComments(true);
+    if (unfoldComments) {
+      setUnfoldComments(false);
+    } else {
+      setUnfoldComments(true);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImage !== 0) {
+      setCurrentImage((prev) => prev - 1);
+    }
+  };
+
+  const nextImage = () => {
+    if (currentImage !== images.length - 1) {
+      setCurrentImage((prev) => prev + 1);
+    }
   };
 
   const mappedComments =
     comments.length > 0 ? (
-      comments.map((comment: any) => (
+      comments.map((comment: any, index: React.Key) => (
         <CommentCard
+          key={index}
           userCommentedId={comment.userCommentedId}
           userCommentedName={comment.userCommentedName}
           userCommentedProfileImage={comment.userCommentedProfileImage}
           commentContent={comment.commentContent}
+          commentCreatedAt={comment.commentCreatedAt}
         />
       ))
     ) : (
@@ -99,15 +111,35 @@ const PostCard: React.FC<IPost> = ({
       </div>
       <div className="postcard__content">{content}</div>
       <div className="postcard__media">
-        {
-          //<img src="https://picsum.photos/500/300" />
-        }
+        {images.length > 1 ? (
+          <button
+            disabled={currentImage === 0 ? true : false}
+            className="prev"
+            onClick={() => prevImage()}
+          >
+            Prev
+          </button>
+        ) : (
+          ""
+        )}
+
+        {images.length > 0 ? <img src={`${images[currentImage]}`} /> : ""}
+
+        {images.length > 1 ? (
+          <button
+            disabled={currentImage === images.length - 1 ? true : false}
+            className="next"
+            onClick={() => nextImage()}
+          >
+            Next
+          </button>
+        ) : (
+          ""
+        )}
       </div>
       <div className="postcard__optionbar">
         <div
-          className={`postcard__optionbar__like ${
-            isPostLikedByLoggedUser ? "liked" : ""
-          }`}
+          className={`postcard__optionbar__like ${isPostLiked ? "liked" : ""}`}
           onClick={(e) => like()}
         >
           {likes.length} Likes
@@ -118,7 +150,6 @@ const PostCard: React.FC<IPost> = ({
         >
           {comments.length} Comment
         </div>
-        <div className="postcard__optionbar__share">Share</div>
       </div>
       <div
         className={`postcard__comments ${unfoldComments ? "set__visible" : ""}`}

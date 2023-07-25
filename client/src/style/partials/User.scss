@@ -56,8 +56,74 @@
     flex-direction: column;
     gap: 1rem;
   }
+  &__rightmenu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    gap: 1rem;
+    &__options {
+      transition-duration: 0.5s;
+      max-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      button {
+        align-self: flex-end;
+      }
+    }
+    &__main {
+      align-self: flex-end;
+    }
+  }
+}
+
+.show-options {
+  max-height: 1000px;
+}
+
+dialog {
+  position: fixed;
+  z-index: 1;
+  &::backdrop {
+    background: rgba(69, 69, 69, 0.278);
+  }
+}
+
+.dialog {
+  width: 50%;
+  border: $default-border;
+  border-radius: 5px;
+  animation: appear 0.5s;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    &__close {
+      cursor: pointer;
+      transition-duration: 0.2s;
+      color: black;
+      &:hover {
+        color: gray;
+      }
+    }
+  }
 }
 
 .active {
   background-color: rgb(231, 231, 231) !important;
+}
+
+.change-profile-picture {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  img {
+    width: 100%;
+  }
+  input[type="file"] {
+    display: none;
+  }
 }
