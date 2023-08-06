@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 import axios from "axios";
+import { act } from "react-dom/test-utils";
+import { IPost } from "../../interfaces/types";
 
 export interface UserState {
   userId: String | null;
@@ -31,9 +33,22 @@ export const userSlice = createSlice({
       state.userPosts = action.payload.posts;
       state.userComments = action.payload.comments;
     },
+    changePostInUserPosts: (state, action) => {
+      state.userPosts[
+        state.userPosts
+          .map((post: IPost) => post._id)
+          .indexOf(action.payload._id)
+      ] = action.payload;
+    },
+    updatePostsForUser: (state, action) => {
+      state.userPosts = action.payload.filter(
+        (post: IPost) => post.userId === state.userId
+      );
+    },
   },
 });
 
-export const { loadUserData } = userSlice.actions;
+export const { loadUserData, changePostInUserPosts, updatePostsForUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;

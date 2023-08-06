@@ -47,6 +47,7 @@ const Navbar = () => {
               dispatch(logoutUser);
               localStorage.removeItem("token");
               localStorage.removeItem("userId");
+              document.location.reload();
             }}
             className="navbar__list__item__link"
           >

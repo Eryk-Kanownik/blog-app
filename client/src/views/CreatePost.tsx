@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
-import { fileUploadConfig } from "../helpers/AxiosConfigs";
 import { useNavigate } from "react-router-dom";
 import LittleImage from "./LittleImage";
 import { useAppDispatch } from "../app/hooks";
@@ -14,11 +13,17 @@ const CreatePost = () => {
   const [files, setFiles] = useState<FileList>();
   const [preview, setPreview] = useState<any>([]);
 
+  useEffect(() => {
+    let pv = [];
+    for (var i = 0; i < files?.length!; i++) {
+      pv.push(URL.createObjectURL(files!.item(i)!));
+    }
+    setPreview(pv);
+  }, [files]);
+
   const chooseFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     let files = e.target.files!;
-    for (var i = 0; i < files?.length!; i++) {
-      preview.push(URL.createObjectURL(files.item(i)!));
-    }
+
     setFiles(files);
   };
 
@@ -33,13 +38,24 @@ const CreatePost = () => {
     for (var i = 0; i < files?.length!; i++) {
       formData.append("files", files?.item(i)!);
     }
-    let res = await axios.post(
-      "http://localhost:5000/posts",
-      formData,
-      fileUploadConfig
-    );
+    let res = await axios.post("http://localhost:5000/posts", formData, {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        "Content-Type": "multipart/form-data",
+      },
+    });
     dispatch(serverMessage(res.data));
     navigate("/");
+  };
+
+  const onClickDelete = (index: number) => {
+    let dt = new DataTransfer();
+    for (var i = 0; i < files!.length!; i++) {
+      if (i !== index) {
+        dt.items.add(files!.item(i)!);
+      }
+    }
+    setFiles(dt.files);
   };
 
   return (
@@ -61,7 +77,12 @@ const CreatePost = () => {
           <div className="create-post__form__images">
             {preview.length > 0
               ? preview.map((imgSrc: any, index: React.Key) => (
-                  <LittleImage key={index} imagePath={imgSrc} />
+                  <LittleImage
+                    index={index}
+                    key={index}
+                    onClickDelete={onClickDelete}
+                    imagePath={imgSrc}
+                  />
                 ))
               : "No images uploaded..."}
           </div>

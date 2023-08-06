@@ -13,15 +13,24 @@ import CreatePost from "./views/CreatePost";
 
 function App() {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     async function getUser() {
-      if (localStorage.getItem("token") && localStorage.getItem("userId")) {
+      if (localStorage.getItem("token")) {
         let res = await axios.get(
-          `http://localhost:5000/users/${localStorage.getItem("userId")}`
+          `http://localhost:5000/users/${localStorage.getItem("userId")}`,
+          {
+            headers: {
+              authorization: localStorage.getItem("token"),
+            },
+          }
         );
         dispatch(loadUser(res.data.body));
+      } else {
+        delete axios.defaults.headers.common["Authorization"];
       }
     }
+
     getUser();
   }, []);
   return (

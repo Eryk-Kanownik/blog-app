@@ -51,13 +51,12 @@
 }
 
 .little-image {
-  height: 50px;
   animation: appear 0.5s;
   background-color: rgb(220, 220, 220);
   position: relative;
-  box-shadow: 0 0 2px;
   cursor: pointer;
   &__delete {
+    z-index: 1;
     box-shadow: 0 0 2px;
     position: absolute;
     right: 0;
@@ -69,7 +68,16 @@
     color: white;
     transform: translate(50%, -50%);
   }
-  img {
+  &__image {
+    height: 50px;
     width: 50px;
+    overflow: hidden;
+    box-shadow: 0 0 2px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    img {
+      height: 50px;
+    }
   }
 }

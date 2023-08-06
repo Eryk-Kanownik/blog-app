@@ -11,7 +11,7 @@ export interface LoginState {
 }
 
 const initialState: LoginState = {
-  token: localStorage.getItem("token"),
+  token: localStorage.getItem("token") ? localStorage.getItem("token") : null,
   userId: null,
   userProfileImage: undefined,
   username: "Loading...",
@@ -23,6 +23,7 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     loadUser: (state, action) => {
+      state.token = action.payload.token;
       state.userId = action.payload.user._id;
       state.username = action.payload.user.username;
       state.userProfileImage = action.payload.user.userProfileImage;
@@ -39,9 +40,13 @@ export const loginSlice = createSlice({
       state.username = null;
       state.userProfileImage = null;
     },
+    changeProfilePicture: (state, action) => {
+      state.userProfileImage = action.payload;
+    },
   },
 });
 
-export const { loginUser, logoutUser, loadUser } = loginSlice.actions;
+export const { loginUser, logoutUser, loadUser, changeProfilePicture } =
+  loginSlice.actions;
 
 export default loginSlice.reducer;

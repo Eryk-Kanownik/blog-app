@@ -21,11 +21,11 @@
       border-radius: 200px;
       overflow: hidden;
       display: flex;
-      align-items: center;
+      justify-content: center;
       box-shadow: 0 0 5px black;
       cursor: pointer;
       img {
-        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -93,7 +93,7 @@ dialog {
 }
 
 .dialog {
-  width: 50%;
+  inset: 10%;
   border: $default-border;
   border-radius: 5px;
   animation: appear 0.5s;
@@ -119,11 +119,51 @@ dialog {
 .change-profile-picture {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   gap: 1rem;
-  img {
-    width: 100%;
+  &__preview {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    img {
+      height: 100%;
+      box-shadow: 0 0 50px;
+    }
   }
   input[type="file"] {
     display: none;
   }
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .dialog {
+    inset: 0 1rem;
+  }
+}
+//tablets
+@media (min-width: 481px) and (max-width: 768px) {
+  .dialog {
+    inset: 0 1rem;
+  }
+}
+//laptops
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dialog {
+    inset: 0 10%;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .dialog {
+    margin: 0 15%;
+  }
+}
+@media (min-width: 1201px) and (max-width: 1500px) {
+}
+@media (min-width: 1501px) {
 }

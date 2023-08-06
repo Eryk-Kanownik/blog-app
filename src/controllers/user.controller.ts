@@ -7,6 +7,7 @@ import { AuthRequest, auth } from "../helpers/auth";
 
 import jwt from "jsonwebtoken";
 import Post from "../models/post.model";
+import { userUpload } from "../helpers/fileUpload";
 
 const router = Router();
 
@@ -14,7 +15,6 @@ router.post("/register", async (req: Request, res: Response) => {
   let { username, password, email } = req.body;
   try {
     let user = await User.findOne({ email });
-    console.log(email);
     if (user !== null) {
       return res.status(200).json({
         state: ResponseType.FALIURE,
@@ -33,7 +33,6 @@ router.post("/register", async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({
       state: ResponseType.FALIURE,
       message: "Server error!",
@@ -62,7 +61,6 @@ router.post("/login", async (req: Request, res: Response) => {
             token,
             userId: user.id,
             username: user.username,
-            userProfileImage: user.userProfileImage,
           },
         });
       } else {
@@ -94,10 +92,9 @@ router.get("/", auth, async (req: AuthRequest, res: Response) => {
   });
 });
 
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/:userId", auth, async (req: Request, res: Response) => {
   let { userId } = req.params;
-
-  const user = await User.findById({ _id: userId }).select("-password");
+  const user = await User.findById(userId).select("-password");
   const posts = await Post.find({ userId }).sort({ createdAt: -1 });
   const allComments = await Post.find();
 
@@ -110,7 +107,6 @@ router.get("/:userId", async (req: Request, res: Response) => {
       }
     })
   );
-
   return res.json({
     state: ResponseType.SUCCESS,
     message: `User of id ${userId}`,
@@ -148,7 +144,6 @@ router.patch("/change", auth, async (req: AuthRequest, res: Response) => {
       let { userId }: any = req.user;
       let user = await User.findById(userId);
       let isUsernameTaken = await User.find({ username });
-
       if (isUsernameTaken === undefined) {
         oldUsername = user!.username;
         user!.username = username;
@@ -206,6 +201,39 @@ router.patch("/change", auth, async (req: AuthRequest, res: Response) => {
     });
   }
 });
+
+router.post(
+  "/profile-picture",
+  auth,
+  userUpload.single("file"),
+  async (req: AuthRequest, res: Response) => {
+    let { userId }: any = req.user;
+    let user = await User.findById(userId);
+    let pImage = "http://localhost:5000/" + req.file!.path;
+    user!.userProfileImage = pImage;
+    await user!.save();
+    let posts = await Post.find();
+    posts.forEach(async (post) => {
+      if (post.userId.toString() === userId.toString()) {
+        post.userProfileImage = pImage;
+      }
+      post.comments.forEach(async (comment: any) => {
+        if (comment.userCommentedId.toString() === userId.toString()) {
+          comment.userCommentedProfileImage = pImage;
+        }
+        await comment!.save({ suppressWarning: true });
+      });
+      await post!.save();
+    });
+    return res.status(200).json({
+      state: ResponseType.SUCCESS,
+      message: `Profile picture changed!`,
+      body: {
+        newProfilePicture: pImage,
+      },
+    });
+  }
+);
 
 const userRoutes = router;
 

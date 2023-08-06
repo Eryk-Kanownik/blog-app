@@ -2,12 +2,12 @@ import Router, { Request, Response } from "express";
 import Post from "../models/post.model";
 import { ResponseType } from "../helpers/responseStatus";
 import { AuthRequest, auth } from "../helpers/auth";
-import { upload } from "../helpers/fileUpload";
-import fs from "fs";
-import { serverMessage } from "../../client/src/features/message/messageSlice";
+import { postUpload } from "../helpers/fileUpload";
+import User from "../models/user.model";
 
 const router = Router();
 
+//get posts
 router.get("/", async (req: Request, res: Response) => {
   const posts = await Post.find().sort({ createdAt: -1 });
   return res.status(200).json({
@@ -17,6 +17,7 @@ router.get("/", async (req: Request, res: Response) => {
   });
 });
 
+//get post
 router.get("/:postId", async (req: Request, res: Response) => {
   const post = await Post.findById(req.params.postId);
   return res.status(200).json({
@@ -26,10 +27,11 @@ router.get("/:postId", async (req: Request, res: Response) => {
   });
 });
 
+//add post
 router.post(
   "/",
   auth,
-  upload.array("files"),
+  postUpload.array("files"),
   async (req: AuthRequest, res: Response) => {
     try {
       let { files }: any = req;
@@ -37,16 +39,17 @@ router.post(
         (file: any) => "http://localhost:5000/" + file.path
       )!;
       let { username, userId, userProfileImage }: any = req.user;
+      let user = await User.findById(userId);
       let { content } = req.body;
       let post = {
         content,
         username,
         userId,
-        userProfileImage,
+        userProfileImage: user!.userProfileImage,
         images: paths,
       };
-      await Post.create(post);
 
+      await Post.create(post);
       return res.status(200).json({
         state: ResponseType.SUCCESS,
         message: `Post created!`,
@@ -58,16 +61,6 @@ router.post(
         message: `Something went wrong. Post not created.`,
       });
     }
-  }
-);
-
-//upload file
-router.post(
-  "/files",
-  upload.array("files"),
-  async (req: AuthRequest, res: Response) => {
-    let { files }: any = req;
-    let paths = files?.map((file: any) => file.path)!;
   }
 );
 
@@ -95,6 +88,30 @@ router.put("/:postId/like", auth, async (req: AuthRequest, res: Response) => {
       body: post,
     });
   }
+});
+
+//edit post
+router.put("/:postId", auth, async (req: AuthRequest, res: Response) => {
+  let { content } = req.body;
+  let post = await Post.findById(req.params.postId);
+  post!.content = content;
+  post!.save();
+  return res.json({
+    state: ResponseType.SUCCESS,
+    message: `Post edited!`,
+    body: post,
+  });
+});
+
+//delete post
+router.delete("/:postId", auth, async (req: AuthRequest, res: Response) => {
+  await Post.findById(req.params.postId).deleteOne();
+  let posts = await Post.find();
+  return res.json({
+    state: ResponseType.SUCCESS,
+    message: `Post deleted!`,
+    body: posts,
+  });
 });
 
 router.post(

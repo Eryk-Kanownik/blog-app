@@ -12,6 +12,8 @@ import ChangeProfilePicture from "../components/ChangeProfilePicture";
 
 const User = () => {
   const user = useAppSelector((state) => state.user);
+  const loggedUser = useAppSelector((state) => state.login);
+
   const [selectedOption, setSelectedState] = useState<"change-profile-picture">(
     "change-profile-picture"
   );
@@ -20,12 +22,15 @@ const User = () => {
   const dispatch = useDispatch();
 
   const { userId } = useParams();
-
   const [postsActive, setPostsActive] = useState<boolean>(true);
 
   useEffect(() => {
     async function getUserWithData() {
-      let res = await axios.get(`http://localhost:5000/users/${userId}`);
+      let res = await axios.get(`http://localhost:5000/users/${userId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
       dispatch(loadUserData(res.data.body));
     }
     getUserWithData();
@@ -68,7 +73,7 @@ const User = () => {
 
   function renderComponentInDialogBox() {
     if (selectedOption === "change-profile-picture") {
-      return <ChangeProfilePicture />;
+      return <ChangeProfilePicture parentRef={dialogRef.current} />;
     }
   }
 
@@ -84,23 +89,9 @@ const User = () => {
             <h1>{user.username}</h1>
           </div>
         </div>
-        <div className="user__sections">
-          <div
-            className={`user__sections__posts ${postsActive ? "active" : ""}`}
-            onClick={() => setPostsActive(true)}
-          >
-            <strong>Posts {user.userPosts.length}</strong>
-          </div>
-          <div
-            className={`user__sections__comments ${
-              postsActive ? "" : "active"
-            }`}
-            onClick={() => setPostsActive(false)}
-          >
-            <strong>Comments {user.userComments.length}</strong>
-          </div>
-        </div>
+
         <div className="user__data">{data}</div>
+
         <div className="user__rightmenu">
           <div
             className={`user__rightmenu__options ${
@@ -115,15 +106,17 @@ const User = () => {
             >
               Change profile picture
             </button>
-            <button className="btn">Hi</button>
-            <button className="btn">Bye</button>
           </div>
-          <button
-            className="btn user__rightmenu__main"
-            onClick={() => setOptions(!options)}
-          >
-            Options
-          </button>
+          {loggedUser.userId === user.userId ? (
+            <button
+              className="btn user__rightmenu__main"
+              onClick={() => setOptions(!options)}
+            >
+              Options
+            </button>
+          ) : (
+            ""
+          )}
         </div>
         <dialog ref={dialogRef} className="dialog">
           <div className="dialog__header">

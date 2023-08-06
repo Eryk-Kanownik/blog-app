@@ -20,7 +20,7 @@ export const auth = async (
   if (req.headers["authorization"]) {
     try {
       let token = req.headers["authorization"];
-      let decoded = await jwt.verify(token, process.env.JWT_SECRET!);
+      let decoded = await jwt.verify(token.toString(), process.env.JWT_SECRET!);
       req.user = decoded;
       next();
     } catch (e) {

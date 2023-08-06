@@ -81,9 +81,11 @@ a:hover {
   width: 50px;
   height: 50px;
   box-shadow: 0 0 5px gray;
+  display: flex;
+  justify-content: center;
 }
 .postcard__header__user__photo img {
-  width: 100%;
+  height: 100%;
 }
 .postcard__header__options {
   cursor: pointer;
@@ -123,6 +125,16 @@ a:hover {
 }
 .postcard__content {
   padding: 0 1rem 0.5rem;
+}
+.postcard__edit {
+  padding: 0 1rem;
+}
+.postcard__edit__content {
+  width: 100%;
+}
+.postcard__edit__btns {
+  display: flex;
+  gap: 0.5rem;
 }
 .postcard__media img {
   width: 100%;
@@ -202,9 +214,11 @@ a:hover {
   overflow: hidden;
   box-shadow: 0 0 5px gray;
   background-color: white;
+  display: flex;
+  justify-content: center;
 }
 .add__comment__image img {
-  width: 100%;
+  height: 100%;
 }
 
 .set__visible {
@@ -245,9 +259,11 @@ a:hover {
   border-radius: 50px;
   overflow: hidden;
   box-shadow: 0 0 5px gray;
+  display: flex;
+  justify-content: center;
 }
 .commentcard__header__photo img {
-  width: 100%;
+  height: 100%;
 }
 .commentcard__date {
   padding: 0.5rem 1rem;
@@ -319,9 +335,11 @@ a:hover {
   overflow: hidden;
   box-shadow: 0 0 5px rgb(211, 211, 211);
   border: solid 1px rgb(221, 221, 221);
+  display: flex;
+  justify-content: center;
 }
 .navbar__list__item__image img {
-  width: 100%;
+  height: 100%;
 }
 .navbar__list__item__link {
   color: black;
@@ -506,12 +524,12 @@ a:hover {
   border-radius: 200px;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  justify-content: center;
   box-shadow: 0 0 5px black;
   cursor: pointer;
 }
 .user__header__image img {
-  width: 100%;
+  height: 100%;
 }
 .user__sections {
   display: grid;
@@ -576,7 +594,7 @@ dialog::backdrop {
 }
 
 .dialog {
-  width: 50%;
+  inset: 10%;
   border: solid 1px rgb(221, 221, 221);
   border-radius: 5px;
   animation: appear 0.5s;
@@ -602,15 +620,47 @@ dialog::backdrop {
 .change-profile-picture {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
-.change-profile-picture img {
-  width: 100%;
+.change-profile-picture__preview {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.change-profile-picture__preview img {
+  height: 100%;
+  box-shadow: 0 0 50px;
 }
 .change-profile-picture input[type=file] {
   display: none;
 }
 
+@media (min-width: 320px) and (max-width: 480px) {
+  .dialog {
+    inset: 0 1rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  .dialog {
+    inset: 0 1rem;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dialog {
+    inset: 0 10%;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .dialog {
+    margin: 0 15%;
+  }
+}
 .create-post {
   animation: appear 0.5s;
 }
@@ -661,14 +711,13 @@ dialog::backdrop {
   }
 }
 .little-image {
-  height: 50px;
   animation: appear 0.5s;
   background-color: rgb(220, 220, 220);
   position: relative;
-  box-shadow: 0 0 2px;
   cursor: pointer;
 }
 .little-image__delete {
+  z-index: 1;
   box-shadow: 0 0 2px;
   position: absolute;
   right: 0;
@@ -680,8 +729,17 @@ dialog::backdrop {
   color: white;
   transform: translate(50%, -50%);
 }
-.little-image img {
+.little-image__image {
+  height: 50px;
   width: 50px;
+  overflow: hidden;
+  box-shadow: 0 0 2px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+}
+.little-image__image img {
+  height: 50px;
 }
 
 * {

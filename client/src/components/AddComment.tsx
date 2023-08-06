@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import axios from "axios";
-import { authConfig } from "../helpers/AxiosConfigs";
 import { addComment } from "../features/posts/postsSlice";
 import { serverMessage } from "../features/message/messageSlice";
+import { changePostInUserPosts } from "../features/user/userSlice";
 
 const AddComment: React.FC<{ postId: string }> = ({ postId }) => {
   const dispatch = useAppDispatch();
@@ -28,9 +28,16 @@ const AddComment: React.FC<{ postId: string }> = ({ postId }) => {
     let res = await axios.post(
       `http://localhost:5000/posts/${postId}/comment`,
       { content: comment },
-      authConfig
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
     );
     dispatch(addComment(res.data.body));
+    if (loggedUser.userId === res.data.body.userId) {
+      dispatch(changePostInUserPosts(res.data.body));
+    }
     dispatch(serverMessage(res.data));
     setComment("");
     inputRef.current.value = "";

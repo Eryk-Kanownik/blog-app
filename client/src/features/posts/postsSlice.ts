@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPost } from "../../interfaces/types";
-import { stat } from "fs";
 import axios from "axios";
 
 export interface PostsState {
@@ -32,6 +31,14 @@ export const postsSlice = createSlice({
         state.posts.map((post) => post._id).indexOf(action.payload._id)
       ] = action.payload;
     },
+    changePost: (state, action) => {
+      state.posts[
+        state.posts.map((post) => post._id).indexOf(action.payload._id)
+      ] = action.payload;
+    },
+    updatePosts: (state, action) => {
+      state.posts = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -48,6 +55,7 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { likePost, addComment } = postsSlice.actions;
+export const { likePost, addComment, changePost, updatePosts } =
+  postsSlice.actions;
 
 export default postsSlice.reducer;
